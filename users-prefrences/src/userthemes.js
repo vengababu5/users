@@ -8,9 +8,9 @@ import Nav from 'react-bootstrap/Nav'
 
 const UserThemes = () => {
     const [themes, setThemes] = useState([
-        { userName: '', themeColor: 'light' },
-        { userName: '', themeColor: 'primary' },
-        { userName: '', themeColor: 'dark' },
+        { userName: 'user1', themeColor: 'light' },
+        { userName: 'user2', themeColor: 'primary' },
+        { userName: 'user3', themeColor: 'dark' },
     ]);
     const [defaultTheme, setDefalutTheme] = useState('light');
 
@@ -18,9 +18,27 @@ const UserThemes = () => {
     useEffect(() => {
 
     }, []);
+
+    const postData = () => {
+        const newArr = [...themes];
+        let obj = {};
+        newArr.filter(val => {
+            if (val.themeColor === defaultTheme) {
+                return val;
+            }
+        })
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userName: newArr[0].userName, theme: newArr[0].themeColor })
+        };
+        fetch('https://locahost/8081/updateTheme', requestOptions)
+            .then(response => response.json())
+            .then(data => this.setState({ postId: data.id }));
+    }
     const themeHandlerChange = (event) => {
         setDefalutTheme(event.target.innerHTML)
-        console.log(defaultTheme);
+        postData();
     }
 
     return (
